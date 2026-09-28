@@ -183,10 +183,6 @@ public class NetworkPlayerController : NetworkBehaviour
     private void OnScoreChanged(int oldScore, int newScore)
     {
         UpdatePlayerText();
-
-        Debug.Log(
-            $"점수 변경: {oldScore} → {newScore}, netId = {netId}"
-        );
     }
 
     private void UpdatePlayerText()
@@ -203,10 +199,11 @@ public class NetworkPlayerController : NetworkBehaviour
         Vector3 spawnPosition =
             transform.position + Vector3.right * 1.5f;
 
-        // 우선 서버 프로그램 안에 GameObject를 생성한다.
+        // 우선 서버 안에 GameObject를 생성한다.
         GameObject bomb = Instantiate(
             bombPrefab,
             spawnPosition,
+            // 회전 없이 기본 방향
             Quaternion.identity
         );
 
