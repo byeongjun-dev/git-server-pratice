@@ -6,6 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkPlayerController : NetworkBehaviour
 {
+    // 서버에서 생성할 폭탄 프리팹
+    [SerializeField]
+    private GameObject bombPrefab;
+
     [Header("화면 표시")]
     [SerializeField] private TMP_Text nameText;
 
@@ -74,6 +78,12 @@ public class NetworkPlayerController : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             CmdRequestPrivateEffect();
+        }
+
+        // B키를 누르면 서버에 폭탄 생성을 요청한다.
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            CmdSpawnBomb();
         }
     }
 
@@ -184,5 +194,27 @@ public class NetworkPlayerController : NetworkBehaviour
         if (nameText == null) return;
 
         nameText.text = $"Player {netId}\nScore: {score}";
+    }
+
+    [Command]
+    private void CmdSpawnBomb()
+    {
+        // 플레이어 오른쪽에 폭탄을 생성한다.
+        Vector3 spawnPosition =
+            transform.position + Vector3.right * 1.5f;
+
+        // 우선 서버 프로그램 안에 GameObject를 생성한다.
+        GameObject bomb = Instantiate(
+            bombPrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        // 생성 사실을 모든 Client에 전달한다.
+        NetworkServer.Spawn(bomb);
+
+        Debug.Log(
+            $"서버: 플레이어 {netId}의 요청으로 폭탄 생성"
+        );
     }
 }

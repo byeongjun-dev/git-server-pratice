@@ -128,8 +128,10 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  bombPrefab: {fileID: 6500754394785238633, guid: 6d26803827dcd4c4eb4cf64ee47a2a52, type: 3}
   nameText: {fileID: 2941428920519280310}
-  moveSeepd: 5
+  moveSpeed: 5
+  flashDuration: 0.5
 --- !u!50 &9021301089042152769
 Rigidbody2D:
   serializedVersion: 5
