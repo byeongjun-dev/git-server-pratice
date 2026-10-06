@@ -70,6 +70,7 @@ public class NetworkPlayerBombSpawner : NetworkBehaviour
 
         // 4. 플레이어 위치와 requestedPosition 사이의 거리를 계산한다.
         float distance = Vector2.Distance(transform.position,requestedPosition);
+
         // 5. 계산한 거리가 maxSpawnDistance보다 큰지 검사한다.
         //    너무 멀다면 요청한 클라이언트에게 거절 이유를 보내고 종료한다.
         if (distance > maxSpawnDistance)
@@ -80,13 +81,17 @@ public class NetworkPlayerBombSpawner : NetworkBehaviour
 
         // 6. 모든 검사를 통과했으므로 remainingBombs를 1 감소시킨다.
         remainingBombs--;
+
         // 7. 현재 서버 시간에 bombCooldown을 더해서
         //    nextBombAllowedTime을 갱신한다.
         nextBombAllowedTime = NetworkTime.time + bombCooldown;
+
         // 8. requestedPosition에 bombPrefab을 생성한다.
-        GameObject bomb = Instantiate(bombPrefab,requestedPosition,Quaternion.identity);        
+        GameObject bomb = Instantiate(bombPrefab,requestedPosition,Quaternion.identity);    
+
         // 9. 생성된 폭탄을 NetworkServer.Spawn으로 등록한다.
         NetworkServer.Spawn(bomb);
+        
         // 10. 서버 Console에 폭탄 생성 승인 기록을 출력한다.
         Debug.Log( $"서버 승인: 플레이어 {netId}가 " +  $"{requestedPosition} 위치에 폭탄 {bomb.name}을 생성했습니다.");
     }
